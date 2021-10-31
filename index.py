@@ -28,6 +28,7 @@ CONTACT = StringVar()
 
 #============================METHODS=====================================
 
+
 def Database():
     conn = sqlite3.connect("pythontut.db")
     cursor = conn.cursor()
@@ -59,6 +60,13 @@ def SubmitData():
         GENDER.set("")
         AGE.set("")
         ADDRESS.set("")
+        FIRSTNAME = StringVar()
+LASTNAME = StringVar()
+GENDER = StringVar()
+AGE = StringVar()
+ADDRESS = StringVar()
+CONTACT = StringVar()
+
         CONTACT.set("")
 
 def UpdateData():
@@ -108,6 +116,16 @@ def OnSelected(event):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = ((screen_width/2) + 450) - (width/2)
+            result = tkMessageBox.showwarning('', 'Please Complete The Required Field', icon="warning")
+    else:
+        tree.delete(*tree.get_children())
+        conn = sqlite3.connect("pythontut.db")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO `member` (firstname, lastname, gender, age, address, contact) VALUES(?, ?, ?, ?, ?, ?)", (str(FIRSTNAME.get()), str(LASTNAME.get()), str(GENDER.get()), int(AGE.get()), str(ADDRESS.get()), str(CONTACT.get())))
+        conn.commit()
+        cursor.execute("SELECT * FROM `member` ORDER BY `lastname` ASC")
+        fetch = cursor.fetchall()
+        for data in fetch:
     y = ((screen_height/2) + 20) - (height/2)
     UpdateWindow.resizable(0, 0)
     UpdateWindow.geometry("%dx%d+%d+%d" % (width, height, x, y))
@@ -232,6 +250,13 @@ def AddNewWindow():
     age.grid(row=3, column=1)
     address = Entry(ContactForm, textvariable=ADDRESS,  font=('arial', 14))
     address.grid(row=4, column=1)
+    e.grid(row=1, column=1)
+    RadioGroup.grid(row=2, column=1)
+    age = Entry(ContactForm, textvariable=AGE,  font=('arial', 14))
+    age.grid(row=3, column=1)
+    address = Entry(ContactForm, textvariable=ADDRESS,  font=('arial', 14))
+    address.grid(row=4, column=1)
+    
     contact = Entry(ContactForm, textvariable=CONTACT,  font=('arial', 14))
     contact.grid(row=5, column=1)
     
